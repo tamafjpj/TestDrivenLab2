@@ -5,7 +5,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 public class Main {
     public static void main(String[] args) {
-        final int numOfThreads=50;
+        final int numOfThreads=10;
          Comparator<Task> idComparator = new Comparator<Task>(){
              @Override
             public int compare(Task c1, Task c2) {
@@ -14,14 +14,17 @@ public class Main {
         };
         Queue<Task> inQueue=new PriorityQueue<>(50,idComparator);
         Queue<Task> outQueue=new PriorityQueue<>(50,idComparator);
-        Logger logger=new Logger();
-        new TaskGenerator(inQueue,4);
-        System.out.println("InQueue:");
-        logger.logQueue(inQueue);
-        for(int i=0;i<numOfThreads;i++){TaskExecutor te = new TaskExecutor(inQueue,outQueue); try {
-            te.thrd.join();
-        }catch (InterruptedException e){e.printStackTrace();}}
-        System.out.println("OutQueue:");
-        logger.logQueue(outQueue);
+        Logger logger=new Logger(outQueue);
+        logger.logger.start();
+        TaskGenerator tg=new TaskGenerator(inQueue);
+        tg.generator.start();
+        for(int i=0;i<numOfThreads;i++){
+            TaskExecutor te=new TaskExecutor(inQueue,outQueue);
+            te.thrd.setDaemon(true);
+            te.thrd.start();
+        }
+        if(inQueue.size()>=30000){
+            tg.generator.interrupt();
+        }
     }
 }

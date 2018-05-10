@@ -9,7 +9,7 @@ import java.util.Queue;
 import static org.junit.Assert.*;
 
 public class TaskGeneratorTest {
-    @Test
+   /* @Test
     public void generateTasks(){
         Comparator<Task> idComparator = new Comparator<Task>(){
             @Override
@@ -21,6 +21,6 @@ public class TaskGeneratorTest {
         assertTrue(inQueue.isEmpty());
         new TaskGenerator(inQueue,15);
         assertEquals(15,inQueue.size());
-    }
+    }*/
 
 }

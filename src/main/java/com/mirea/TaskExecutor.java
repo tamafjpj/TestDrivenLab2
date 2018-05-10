@@ -10,23 +10,31 @@ public class TaskExecutor implements Runnable {
         this.thrd=new Thread(this,"Executor");
         this.inQueue=inQueue;
         this.outQueue=outQueue;
-        thrd.start();
     }
     public void run() {
-       executeTask();
+       while (!thrd.isInterrupted()){
+           executeTask();
+       }
     }
     private void executeTask(){
         Random rd = new Random();
         Task currTask=null;
         if(!inQueue.isEmpty()) {
             synchronized (inQueue) {
-                currTask = inQueue.poll();
+                if(!inQueue.isEmpty()) {
+                    currTask = inQueue.poll();
+                }
             }
         }
         if(currTask!=null) {
             synchronized (outQueue) {
                 currTask.weather = rd.nextInt(61) - 30 + "°C";
-                outQueue.add(currTask);
+                if(outQueue.size()<=30000) {
+                    outQueue.add(currTask);
+                }else
+                    try{
+                        outQueue.wait();
+                    }catch (InterruptedException e){e.printStackTrace();}
             }
         }
 

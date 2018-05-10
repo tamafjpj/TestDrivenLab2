@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class TaskExecutorTest {
 
-    @Test
+   /* @Test
     public void executionTest() {
         Date dt =new Date();
         Task t1 = new Task(1,dt,"Moscow");
@@ -37,5 +37,5 @@ public class TaskExecutorTest {
         assertEquals(0,inQueue.size());
         assertEquals(3,outQueue.size());
         for(Task i:outQueue){assertNotNull(i.getWeather());}
-    }
+    }*/
 }

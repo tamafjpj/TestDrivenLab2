@@ -4,25 +4,32 @@ import java.util.Date;
 import java.util.Queue;
 import java.util.Random;
 
-public class TaskGenerator {
+public class TaskGenerator implements Runnable{
     private final String[] cities = new String[]{"Moscow","Kaliningrad","Pyatigorsk","Saint-petersburg","Chelyabinsk",
                                             "Nizhny-novgorod","Novosibirsk","Vladivostok","Krasnoyarsk","Kazan",
                                             "Ufa","Rostov-na-donu","Samara","Yekaterinburg","Omsk"};
     private Random rnd =new Random();
     private static int id=0;
-
-    public TaskGenerator(Queue<Task> inQueue, int numOfTasks){
-        fillQueue(inQueue,numOfTasks);
+    Thread generator;
+    Queue<Task> inQueue;
+    public TaskGenerator(Queue<Task> inQueue){
+        this.generator=new Thread(this,"Generator");
+        this.inQueue=inQueue;
     }
     private static void incID(){
         id++;
     }
-    private void fillQueue(Queue<Task> inQueue,int N){
-        for(int i=0;i<N;i++){
+    public void generate(Queue<Task> inQueue){
+            synchronized (inQueue){
             inQueue.add(new Task(id,new Date(),cities[rnd.nextInt(cities.length)]));
-            incID();
+            incID();}
         }
-        id=0;
+
+    @Override
+    public void run() {
+       while(!generator.isInterrupted()){
+           generate(inQueue);
+       }
     }
 
     public String[] getCities() {

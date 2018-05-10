@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class LoggerTest {
 
-    @Test
+  /*  @Test
     public void logQueue() {
         Date dt =new Date();
         Task t1 = new Task(1,dt,"Moscow");
@@ -35,5 +35,5 @@ public class LoggerTest {
         inQueue.poll();
         re=logger.logQueue(inQueue);
         assertNull(re);
-    }
+    }*/
 }
