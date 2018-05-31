@@ -1,4 +1,4 @@
-package com.mirea;
+package weather;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -22,9 +22,6 @@ public class Main {
             TaskExecutor te=new TaskExecutor(inQueue,outQueue);
             te.thrd.setDaemon(true);
             te.thrd.start();
-        }
-        if(inQueue.size()>=30000){
-            tg.generator.interrupt();
         }
     }
 }

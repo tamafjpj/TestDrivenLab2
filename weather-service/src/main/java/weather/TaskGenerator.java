@@ -1,13 +1,16 @@
-package com.mirea;
+package weather;
+
+import data.WeatherDataSource;
+import data.WeatherDataSourceImpl;
 
 import java.util.Date;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 public class TaskGenerator implements Runnable{
-    private final String[] cities = new String[]{"Moscow","Kaliningrad","Pyatigorsk","Saint-petersburg","Chelyabinsk",
-                                            "Nizhny-novgorod","Novosibirsk","Vladivostok","Krasnoyarsk","Kazan",
-                                            "Ufa","Rostov-na-donu","Samara","Yekaterinburg","Omsk"};
+    WeatherDataSource wds = new WeatherDataSourceImpl();
+    private String cities[]=wds.getCities().toArray(new String[wds.getCities().size()]);
     private Random rnd =new Random();
     private static int id=0;
     Thread generator;
@@ -21,8 +24,10 @@ public class TaskGenerator implements Runnable{
     }
     public void generate(Queue<Task> inQueue){
             synchronized (inQueue){
-            inQueue.add(new Task(id,new Date(),cities[rnd.nextInt(cities.length)]));
-            incID();}
+                if(!(inQueue.size()>=30000)) {
+                    inQueue.add(new Task(id, new Date(), cities[rnd.nextInt(cities.length)]));
+                    incID();
+                }}
         }
 
     @Override
@@ -32,7 +37,4 @@ public class TaskGenerator implements Runnable{
        }
     }
 
-    public String[] getCities() {
-        return cities;
-    }
 }

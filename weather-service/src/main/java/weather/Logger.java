@@ -1,4 +1,4 @@
-package com.mirea;
+package weather;
 import java.util.Queue;
 
 public class Logger implements Runnable{

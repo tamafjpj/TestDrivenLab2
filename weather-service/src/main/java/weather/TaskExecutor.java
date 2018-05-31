@@ -1,11 +1,17 @@
-package com.mirea;
+package weather;
+
+import data.WeatherDataSource;
+import data.WeatherDataSourceImpl;
 
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
+
 public class TaskExecutor implements Runnable {
     public Thread thrd;
     private Queue<Task>inQueue;
     private Queue<Task>outQueue;
+    private WeatherDataSource wds = new WeatherDataSourceImpl();
     public TaskExecutor(Queue<Task>inQueue,Queue<Task>outQueue){
         this.thrd=new Thread(this,"Executor");
         this.inQueue=inQueue;
@@ -17,7 +23,6 @@ public class TaskExecutor implements Runnable {
        }
     }
     private void executeTask(){
-        Random rd = new Random();
         Task currTask=null;
         if(!inQueue.isEmpty()) {
             synchronized (inQueue) {
@@ -28,7 +33,7 @@ public class TaskExecutor implements Runnable {
         }
         if(currTask!=null) {
             synchronized (outQueue) {
-                currTask.weather = rd.nextInt(61) - 30 + "°C";
+                currTask.weather = wds.getByCity(currTask.getCity());
                 if(outQueue.size()<=30000) {
                     outQueue.add(currTask);
                 }else

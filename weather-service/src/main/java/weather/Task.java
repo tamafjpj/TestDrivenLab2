@@ -1,4 +1,4 @@
-package com.mirea;
+package weather;
 import java.util.Date;
 
 public class Task {
